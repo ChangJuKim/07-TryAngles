@@ -1,2 +1,1 @@
-# 07-TryAngles
-Graphics 07!!!
+# ideal-eureka
