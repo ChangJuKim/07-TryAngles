@@ -8,11 +8,10 @@ def add_polygon(points, x0, y0, z0, x1, y1, z1, x2, y2, z2):
     add_point(points, x2, y2, z2)
 
 
-def draw_polygons(points, screen, color):
+def draw_polygons(matrix, screen, color):
     if len(matrix) < 3:
         print 'Need at least 3 points to draw'
         return
-    
     point = 0
     while point < len(matrix) - 2:
         draw_line( int(matrix[point][0]),
@@ -20,36 +19,22 @@ def draw_polygons(points, screen, color):
                    int(matrix[point+1][0]),
                    int(matrix[point+1][1]),
                    screen, color)
+        
         draw_line( int(matrix[point+1][0]),
                    int(matrix[point+1][1]),
                    int(matrix[point+2][0]),
                    int(matrix[point+2][1]),
                    screen, color)
+        
         draw_line( int(matrix[point+2][0]),
                    int(matrix[point+2][1]),
                    int(matrix[point][0]),
                    int(matrix[point][1]),
                    screen, color)
+        
         point+= 3
 
 def add_box( points, x, y, z, width, height, depth ):
-    """
-    #top 4 edges (only y)
-    add_edge(points, x, y, z, x + width, y, z)
-    add_edge(points, x, y, z, x, y, z - depth)
-    add_edge(points, x + width, y, z, x + width, y, z - depth)
-    add_edge(points, x, y, z - depth, x + width, y, z - depth)
-    #bottom 4 edges (only y-depth)
-    add_edge(points, x, y - height, z, x + width, y - height, z)
-    add_edge(points, x, y - height, z, x, y - height, z - depth)
-    add_edge(points, x + width, y - height, z, x + width, y - height, z - depth)
-    add_edge(points, x, y - height, z - depth, x + width, y - height, z - depth)
-    #side 4 (only modify y)
-    add_edge(points, x, y, z, x, y - height, z)
-    add_edge(points, x + width, y, z, x + width, y - height, z)
-    add_edge(points, x + width, y, z - depth, x + width, y - height, z - depth)
-    add_edge(points, x, y, z - depth, x, y - height, z - depth)
-    """
     """
     add_edge(points, x, y, z, x+1, y+1, z+1)
     add_edge(points, x+width, y, z, x+width+1, y+1, z+1)
@@ -60,6 +45,46 @@ def add_box( points, x, y, z, width, height, depth ):
     add_edge(points, x+width, y, z-depth, x+width+1, y+1, z-depth+1)
     add_edge(points, x+width, y-height, z-depth, x+width+1, y-height+1, z-depth+1)
     """
+    #front half
+    
+    add_polygon(points, x, y, z,
+                x+width, y, z,
+                x, y, z-depth)
+    add_polygon(points, x+width, y, z-depth,
+                x+width, y, z,
+                x, y, z-depth)
+    add_polygon(points, x, y, z,
+                x+width, y, z,
+                x, y-height, z)
+    add_polygon(points, x+width, y-height, z,
+                x+width, y, z,
+                x, y-height, z)
+    add_polygon(points, x, y, z,
+                x, y-height, z,
+                x, y, z-depth)
+    add_polygon(points, x, y-height, z-depth,
+                x, y, z-depth,
+                x, y-height, z)
+    #back half
+    add_polygon(points, x+width, y-height, z-depth,
+                x+width, y-height, z,
+                x, y-height, z-depth)
+    add_polygon(points, x, y-height, z,
+                x+width, y-height, z,
+                x, y-height, z-depth)
+    add_polygon(points, x+width, y-height, z-depth,
+                x+width, y, z-depth,
+                x, y-height, z-depth)
+    add_polygon(points, x, y, z-depth,
+                x+width, y, z-depth,
+                x, y-height, z-depth)
+    add_polygon(points, x+width, y-height, z-depth,
+                x+width, y-height, z,
+                x+width, y, z-depth)
+    add_polygon(points, x+width, y, z,
+                x+width, y-height, z,
+                x+width, y, z-depth)
+
     
 def add_sphere( points, cx, cy, cz, r, step ):
     i = 0;
