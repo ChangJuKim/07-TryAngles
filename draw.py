@@ -3,6 +3,10 @@ from matrix import *
 from math import *
 
 def add_polygon(points, x0, y0, z0, x1, y1, z1, x2, y2, z2):
+     #print "\n~~1~~" + str(x0) + ", " + str(y0) + ", " + str(z0) + """
+      #    \n~~2~~""" + str(x1) + ", " + str(y1) + ", " + str(z1) + """
+      #    "\n~~3~~""" + str(x2) + ", " + str(y2) + ", " + str(z2) + "\n"
+    
     add_point(points, x0, y0, z0)
     add_point(points, x1, y1, z1)
     add_point(points, x2, y2, z2)
@@ -89,9 +93,10 @@ def add_box( points, x, y, z, width, height, depth ):
 def add_sphere( points, cx, cy, cz, r, step ):
     i = 0;
     matrix = generate_sphere(points, cx, cy, cz, r, step)
-    while i < len(matrix):
-        add_edge(points, matrix[i][0], matrix[i][1], matrix[i][2],
-                         matrix[i][0]+1, matrix[i][1]+1, matrix[i][2]+1)
+    while i < len(matrix)-2:
+        add_polygon(points, matrix[i][0], matrix[i][1], matrix[i][2],
+                         matrix[i+1][0], matrix[i+1][1], matrix[i+1][2],
+                         matrix[i+2][0], matrix[i+2][1], matrix[i+2][2])
         i += 1
     
     
@@ -103,6 +108,7 @@ def generate_sphere( points, cx, cy, cz, r, step ):
         while j < step:
             theta = i * 2 * math.pi / step
             phi = j * math.pi / step
+            print "~~~~~~~~~~~~~~~~~~~~~~~~~~\ntheta=" + str(theta) + "phi=" + str(phi) + "\n"
             x = r * math.cos(theta) + cx
             y = r * math.sin(theta) * math.cos(phi) + cy
             z = r * math.sin(theta) * math.sin(phi) + cz
