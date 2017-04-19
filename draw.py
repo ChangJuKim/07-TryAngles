@@ -39,18 +39,8 @@ def draw_polygons(matrix, screen, color):
         point+= 3
 
 def add_box( points, x, y, z, width, height, depth ):
-    """
-    add_edge(points, x, y, z, x+1, y+1, z+1)
-    add_edge(points, x+width, y, z, x+width+1, y+1, z+1)
-    add_edge(points, x, y-height, z, x+1, y-height+1, z+1)
-    add_edge(points, x, y, z-depth, x+1, y+1, z-depth+1)
-    add_edge(points, x+width, y-height, z, x+width+1, y-height+1, z+1)
-    add_edge(points, x, y-height, z-depth, x+1, y-height+1, z-depth+1)
-    add_edge(points, x+width, y, z-depth, x+width+1, y+1, z-depth+1)
-    add_edge(points, x+width, y-height, z-depth, x+width+1, y-height+1, z-depth+1)
-    """
     #front half
-    
+    """
     add_polygon(points, x, y, z,
                 x+width, y, z,
                 x, y, z-depth)
@@ -85,22 +75,40 @@ def add_box( points, x, y, z, width, height, depth ):
     add_polygon(points, x+width, y-height, z-depth,
                 x+width, y-height, z,
                 x+width, y, z-depth)
+    
     add_polygon(points, x+width, y, z,
                 x+width, y-height, z,
                 x+width, y, z-depth)
-
     
-def add_sphere( points, cx, cy, cz, r, step ):
+    """
+    
+    add_polygon(points, 100, 100, 100,
+                        20, 300, 100,
+                        40, 100, 200)
+    
+    add_polygon(points, 20, 300, 100,
+                        40, 100, 200,
+                        100, 50, 300)
+    
+def add_spherical( points, cx, cy, cz, r, step):
     i = 0;
     matrix = generate_sphere(points, cx, cy, cz, r, step)
+    while i < len(matrix) - 1:
+        add_edge(points, matrix[i][0], matrix[i][1], matrix[i][2],
+                         matrix[i][0]+2, matrix[i][1]+2, matrix[i][2])
+        i += 1
+
+   
+def add_sphere( points, cx, cy, cz, r, step ):
+    i = 0;
+    matrix = generate_sphere(cx, cy, cz, r, step)
     while i < len(matrix)-2:
         add_polygon(points, matrix[i][0], matrix[i][1], matrix[i][2],
                          matrix[i+1][0], matrix[i+1][1], matrix[i+1][2],
                          matrix[i+2][0], matrix[i+2][1], matrix[i+2][2])
         i += 1
     
-    
-def generate_sphere( points, cx, cy, cz, r, step ):
+def generate_sphere(cx, cy, cz, r, step ):
     i = 0
     matrix = []
     while i < step:
@@ -108,11 +116,13 @@ def generate_sphere( points, cx, cy, cz, r, step ):
         while j < step:
             theta = i * 2 * math.pi / step
             phi = j * math.pi / step
-            print "~~~~~~~~~~~~~~~~~~~~~~~~~~\ntheta=" + str(theta) + "phi=" + str(phi) + "\n"
+           # theta = j * math.pi / step
+           # phi = i * 2 * math.pi / step
+            #print "~~~~~~~~~~~~~~~~~~~~~~~~~~\ntheta=" + str(theta) + "phi=" + str(phi) + "\n"
             x = r * math.cos(theta) + cx
             y = r * math.sin(theta) * math.cos(phi) + cy
             z = r * math.sin(theta) * math.sin(phi) + cz
-            matrix.append([x, y, z, 1])
+            matrix.append([x, y, z])
             j += 1
         i += 1
 	#print len(matrix[len(matrix)-1])
@@ -121,13 +131,13 @@ def generate_sphere( points, cx, cy, cz, r, step ):
 
 def add_torus( points, cx, cy, cz, r0, r1, step ):
     i = 0;
-    matrix = generate_torus(points, cx, cy, cz, r0, r1, step)
+    matrix = generate_torus(cx, cy, cz, r0, r1, step)
     while i < len(matrix):
         add_edge(points, matrix[i][0], matrix[i][1], matrix[i][2],
                  matrix[i][0]+1, matrix[i][1]+1, matrix[i][2]+1)
         i += 1
 
-def generate_torus( points, cx, cy, cz, r0, r1, step ):
+def generate_torus(cx, cy, cz, r0, r1, step ):
     i = 0
     matrix = []
     while i < step:
