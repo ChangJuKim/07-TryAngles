@@ -23,7 +23,6 @@ def draw_polygons(matrix, screen, color):
                    int(matrix[point+1][0]),
                    int(matrix[point+1][1]),
                    screen, color)
-        
         draw_line( int(matrix[point+1][0]),
                    int(matrix[point+1][1]),
                    int(matrix[point+2][0]),
@@ -35,7 +34,6 @@ def draw_polygons(matrix, screen, color):
                    int(matrix[point][0]),
                    int(matrix[point][1]),
                    screen, color)
-        
         point+= 3
 
 def add_box( points, x, y, z, width, height, depth ):
@@ -85,20 +83,14 @@ def add_box( points, x, y, z, width, height, depth ):
     add_polygon(points, 100, 100, 100,
                         20, 300, 100,
                         40, 100, 200)
-    
+    """
     add_polygon(points, 20, 300, 100,
                         40, 100, 200,
                         100, 50, 300)
-    
-def add_spherical( points, cx, cy, cz, r, step):
-    i = 0;
-    matrix = generate_sphere(points, cx, cy, cz, r, step)
-    while i < len(matrix) - 1:
-        add_edge(points, matrix[i][0], matrix[i][1], matrix[i][2],
-                         matrix[i][0]+2, matrix[i][1]+2, matrix[i][2])
-        i += 1
+    """
 
-   
+#previous
+    """
 def add_sphere( points, cx, cy, cz, r, step ):
     i = 0;
     matrix = generate_sphere(cx, cy, cz, r, step)
@@ -106,8 +98,36 @@ def add_sphere( points, cx, cy, cz, r, step ):
         add_polygon(points, matrix[i][0], matrix[i][1], matrix[i][2],
                          matrix[i+1][0], matrix[i+1][1], matrix[i+1][2],
                          matrix[i+2][0], matrix[i+2][1], matrix[i+2][2])
+        i += 3
+    """
+#new/experimental
+def add_sphere(points, cx, cy, cz, r, step):
+    i = 1;
+    matrix = generate_sphere(cx, cy, cz, r, step)
+    while i < len(matrix):
+        #prolly not gonna work, but just adding as a fix
+        add_polygon(points, matrix[0][0], matrix[0][1], matrix[0][2],
+                           matrix[1][0], matrix[1][1], matrix[1][2],
+                           matrix[2][0], matrix[2][1], matrix[2][2])
+        if i < step:
+            """
+            add_polygon(points, matrix[0][0], matrix[0][1], matrix[0][2],
+                           matrix[i][0], matrix[i][1], matrix[i][2],
+                           matrix[i+1][0], matrix[i+1][1], matrix[i+1][2])
+            """
+        else:
+            """
+            add_polygon(points, matrix[i][0], matrix[i][1], matrix[i][2],
+                               matrix[i-step][0], matrix[i-step][1], matrix[i-step][2],
+                               matrix[i-step-1][0], matrix[i-step-1][1], matrix[i-step-1][2])
+            """
+            """add_polygon(points, matrix[i][0], matrix[i][1], matrix[i][2],
+                               matrix[i-1][0], matrix[i-1][1], matrix[i-1][2],
+                               matrix[i-step-1][0], matrix[i-step-1][1], matrix[i-step-1][2])
+            """
         i += 1
-    
+
+   
 def generate_sphere(cx, cy, cz, r, step ):
     i = 0
     matrix = []
